@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Management System</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="beforelogin.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    z-index: 10;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 10px;
+    position: relative;
+}
+
+.icon.notification::after, .icon.message::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 8px;
+    height: 8px;
+    background-color: #f00;
+    border-radius: 50%;
+}
+
+.profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.title {
+    font-size: 12px;
+    color: #888;
+    margin-left: 5px;
+}
+
+/* Dropdown Menu Styling */
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 180px;
+    z-index: 100;
+}
+
+.dropdown ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.dropdown ul li {
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown ul li:last-child {
+    border: none;
+}
+
+.dropdown ul li a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    text-align: left;
+}
+
+.dropdown ul li a:hover {
+    background-color: #f0f0f0;
+}
+    </style>
+</head>
+<body>
+
+<div class="hero-background py-5">
+    <header class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto" style="font-size:20px; margin:2px;">
+                    <li class="nav-item navspace"><a class="nav-link font-weight-semibold text-dark" data-key="featured" href="#featured">Featured</a></li>
+                    <li class="nav-item navspace"><a class="nav-link font-weight-semibold text-dark" data-key="viewProperties" href="#viewproducts">View Properties</a></li>
+                    <li class="nav-item navspace"><a class="nav-link font-weight-semibold text-dark" data-key="marketplace" href="#">Marketplace</a></li>
+                    <li class="nav-item navspace"><a class="nav-link font-weight-semibold text-dark" data-key="company" href="#">Company</a></li>
+                    <li class="nav-item navspace"><select id="languageSelector" class="form-control" style="width: 150px; margin-top: 10px;" onchange="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="hi">हिन्दी</option>
+                    </select></li>
+                    <li class="nav-item navspace">
+                        <div class="profile">
+                            <div class="profile-info">
+                                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg" alt="Profile Picture" class="profile-img">
+                                <span class="name">Mani</span>
+                              </div>
+                            <div class="dropdown">
+                                <ul>
+                                    <li><a href="#">My Profile</a></li>
+                                    <li><a href="#">My Contacts</a></li>
+                                    <li><a href="#">Account Settings</a></li>
+                                    <li><a href="#">Log Out</a></li>
+                                </ul>
+                            </div>
+                        </div></li>
+                        
+                </ul>
+                <!-- <li class="nav-item navspace"><select id="languageSelector" class="form-control" style="width: 150px; margin-top: 10px;" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="te">Telugu</option>
+                    <option value="hi">Hindi</option>
+                </select></li> -->
+                
+            </div>
+        </nav>
+        
+
+        <!-- Language Selector -->
+        <!-- <select id="languageSelector" class="form-control" style="width: 150px; margin-top: 10px;" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="te">Telugu</option>
+            <option value="hi">Hindi</option>
+        </select> -->
+    </header>
+    <script src="afterlogin.js"></script>
+
+    <div class="container d-flex flex-row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="text-center">
+            <h1 class="text-hero" data-key="heroTitle">Revolutionizing Property Transactions</h1>
+            <p class="text-description mt-4" data-key="heroDescription">Effortlessly buy, rent, or sell properties with our all-in-one platform designed for seamless transactions.</p>
+            <div class="mt-4">
+                <a href="login.html" target="blank" class="btn btn-primary btn-start px-4 py-2 mr-2" data-key="getStarted">Get started</a>
+                <a href="#" class="btn btn-link font-weight-semibold" data-key="learnMore">Learn more →</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container py-5" id="featured">
+    <div class="gradient-bg"></div>
+    <div class="text-center">
+        <h2 class="text-primary fw-bold">Featured Properties</h2>
+        <p class="display-5 fw-semibold">Choose the right property for you</p>
+        <p class="lead text-muted">Choose an affordable plan that’s packed with the best features for engaging your audience, creating customer loyalty, and driving sales.</p>
+    </div>
+    
+    <div class="row mt-5 d-flex justify-content-center">
+      <div class="col-lg-5 mb-4">
+        <div class="card pricing-card p-4 bg-light">
+            <h3 class="text-center">Taj Hotel</h3>
+            <p class="price text-center">₹10 Lakhs<span class="text-muted fs-6">/week</span></p>
+            <p class="text-center text-muted">Designed for Exceptional Luxury and Service.</p>
+            <ul class="list-unstyled mt-4 text-muted">
+                <li class="d-flex align-items-center"><span class="me-2 text-success">&check;</span>25 Rooms</li>
+                <li class="d-flex align-items-center"><span class="me-2 text-success">&check;</span>Up to 10,000 Guests</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-success">&check;</span>In-Depth Performance Analytics</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-success">&check;</span>24/7 Dedicated Support</li>
+        </ul>
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-outline-primary w-100">View More</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-lg-5 mb-4">
+    <div class="card pricing-card p-4 text-black bg-light">
+        <h3 class="text-center text-primary">Enterprise</h3>
+        <p class="price text-center">₹1 Lakh<span class="text-muted fs-6">/month</span></p>
+        <p class="text-center">Dedicated support and infrastructure for your company.</p>
+        <ul class="list-unstyled mt-4">
+            <li class="d-flex align-items-center"><span class="me-2 text-info">&check;</span>Unlimited products</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-info">&check;</span>Unlimited subscribers</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-info">&check;</span>Advanced analytics</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-info">&check;</span>Dedicated support representative</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-info">&check;</span>Marketing automations</li>
+            <li class="d-flex align-items-center"><span class="me-2 text-info">&check;</span>Custom integrations</li>
+        </ul>
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-primary w-100">View More</a>
+        </div>
+    </div>
+    
+</div>
+</div>
+</div>
+<div id="viewproducts">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    
+    <div id="map"></div>
+    
+    <div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="propertyModalLabel">Property Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="propertyInfo">Loading property details...</p>
+          </div>
+          <div class="container py-5 bg-light">
+            <div class="text-center mb-5">
+              <h2 class="text-primary">Property m</h2>
+              <p class="display-4 text-dark font-weight-bold">Everything you need to know</p>
+            </div>
+          
+            <div class="row g-4">
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card border-0 card-border">
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-primary">Description</h5>
+                    <p class="card-text text-center">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.</p>
+                  </div>
+                  <img src="https://tailwindui.com/plus/img/component-images/bento-03-performance.png" class="card-img-top" alt="Mobile Friendly Image">
+                </div>
+              </div>
+          
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card border-0 card-border">
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-primary">Performance</h5>
+                    <p class="card-text text-center">Lorem ipsum, dolor sit amet consectetur adipisicing elit maiores impedit.</p>
+                  </div>
+                  <img src="https://tailwindui.com/plus/img/component-images/bento-03-performance.png" class="card-img-top" alt="Performance Image">
+                </div>
+              </div>
+          
+          
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card border-0 card-border">
+                  <div class="card-body">
+                    <h5 class="card-title text-center text-primary">Condition</h5>
+                    <p class="card-text text-center">Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget sem sodales gravida.</p>
+                  </div>
+                  <img src="https://tailwindui.com/plus/img/component-images/bento-03-performance.png" class="card-img-top" alt="Powerful APIs Image">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap"
+      async
+      defer
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function initMap() {
+        const center = { lat: 17.4066, lng: 78.4777 };
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 15,
+          center: center,
+        });
+
+        const properties = [
+          { id: 1, lat: 17.4066, lng: 78.4777 ,pri: 6000000},
+          { id: 2, lat: 17.4239, lng: 78.4738 ,pri: 7650000},
+          { id: 3, lat: 17.4399, lng: 78.4983 ,pri: 9800000},
+          { id: 4, lat: 17.3847, lng: 78.4867 ,pri: 5600000},
+          { id: 5, lat: 17.4483, lng: 78.3915 ,pri: 7500000},
+          { id: 6, lat: 17.4424, lng: 78.4633 ,pri: 6008700},
+          { id: 7, lat: 17.3734, lng: 78.5442 ,pri: 7000000},
+          { id: 8, lat: 17.4156, lng: 78.4747 ,pri: 7550000},
+          { id: 9, lat: 17.4214, lng: 78.4576 ,pri: 8786689},
+          { id: 10, lat: 17.3966, lng: 78.4633 },
+          { id: 11, lat: 17.4449, lng: 78.4927 },
+          { id: 12, lat: 17.3685, lng: 78.5273 },
+          { id: 13, lat: 17.3512, lng: 78.4989 },
+          { id: 14, lat: 17.4028, lng: 78.5417 },
+          { id: 15, lat: 17.4304, lng: 78.4656 },
+          { id: 16, lat: 17.3871, lng: 78.4403 },
+          { id: 17, lat: 17.4464, lng: 78.4872 },
+          { id: 18, lat: 17.3506, lng: 78.4747 },
+          { id: 19, lat: 17.3776, lng: 78.5139 },
+          { id: 20, lat: 17.4295, lng: 78.4462 },
+          { id: 21, lat: 17.3925, lng: 78.4598 },
+          { id: 22, lat: 17.4145, lng: 78.5265 },
+          { id: 23, lat: 17.3727, lng: 78.4596 },
+          { id: 24, lat: 17.4355, lng: 78.5079 },
+          { id: 25, lat: 17.3585, lng: 78.4745 },
+          { id: 26, lat: 17.3841, lng: 78.4441 },
+          { id: 27, lat: 17.4084, lng: 78.5053 },
+          { id: 28, lat: 17.4326, lng: 78.5273 },
+          { id: 29, lat: 17.4246, lng: 78.4953 },
+          { id: 30, lat: 17.3996, lng: 78.5245 },
+          { id: 31, lat: 17.3676, lng: 78.4535 },
+          { id: 32, lat: 17.4392, lng: 78.4555 },
+          { id: 33, lat: 17.4115, lng: 78.5035 },
+          { id: 34, lat: 17.3985, lng: 78.4675 },
+          { id: 35, lat: 17.4564, lng: 78.4956 },
+          { id: 36, lat: 17.4457, lng: 78.4732 },
+          { id: 37, lat: 17.3849, lng: 78.4502 },
+          { id: 38, lat: 17.4174, lng: 78.4912 },
+          { id: 39, lat: 17.4069, lng: 78.5234 },
+          { id: 40, lat: 17.4245, lng: 78.5165 },
+          { id: 41, lat: 17.3993, lng: 78.4796 },
+          { id: 42, lat: 17.4303, lng: 78.4786 },
+          { id: 43, lat: 17.3714, lng: 78.5214 },
+          { id: 44, lat: 17.3992, lng: 78.4875 },
+          { id: 45, lat: 17.4557, lng: 78.4884 },
+          { id: 46, lat: 17.4215, lng: 78.4667 },
+          { id: 47, lat: 17.3848, lng: 78.4827 },
+          { id: 48, lat: 17.4039, lng: 78.4492 },
+          { id: 49, lat: 17.3725, lng: 78.4975 },
+          { id: 50, lat: 17.4399, lng: 78.5057 }
+        ];
+
+        // Loop through each property and add a marker
+        properties.forEach((property) => {
+          const marker = new google.maps.Marker({
+            position: { lat: property.lat, lng: property.lng },
+            map: map,
+            icon: {
+              url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+            },
+          });
+
+          // Create an info window with a "View More" button
+          const infoWindow = new google.maps.InfoWindow({
+            content: `
+              <div style="text-align: center;">
+                <h4>Property ${property.id}</h4>
+                <p>Location: (${property.lat}, ${property.lng})</p>
+                <h6>Owner Price: ${property.pri}</h6>
+                <button onclick="showPropertyDetails(${property.id}, ${property.lat}, ${property.lng})" class="btn btn-primary">View More</button>
+              </div>
+              <p></p>
+              <center><a href="graph.html" target="blank">Subscribe for Detailed Analysis</a></center>
+            `,
+          });
+
+          // Open info window when the marker is clicked
+          marker.addListener("click", () => {
+            infoWindow.open(map, marker);
+          });
+        });
+      }
+
+      // Function to display the modal with property details
+      function showPropertyDetails(id, lat, lng) {
+        const propertyInfo = `Property ID: ${id}<br>Latitude: ${lat}<br>Longitude: ${lng}`;
+        document.getElementById("propertyInfo").innerHTML = propertyInfo;
+        const modal = new bootstrap.Modal(document.getElementById("propertyModal"));
+        modal.show();
+      }
+    </script>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Translation data
+const translations = {
+    en: {
+        heroTitle: "Revolutionizing Property Transactions",
+        heroDescription: "Effortlessly buy, rent, or sell properties with our all-in-one platform designed for seamless transactions.",
+        featured: "Featured",
+        viewProperties: "View Properties",
+        marketplace: "Marketplace",
+        company: "Company",
+        login: "Log in →",
+        getStarted: "Get started",
+        learnMore: "Learn more →"
+    },
+    te: {
+        heroTitle: "ఆస్తి లావాదేవీలను విప్లవాత్మకం చేస్తోంది",
+        heroDescription: "సులభంగా కొనుగోలు చేయండి, అద్దెకి తీసుకోండి లేదా అమ్మండి మా అంతా ఒక్కటే ప్లాట్‌ఫారమ్‌తో.",
+        featured: "ఫీచర్డ్",
+        viewProperties: "ఆస్తులను చూడండి",
+        marketplace: "మార్కెట్ ప్లేస్",
+        company: "కంపెనీ",
+        login: "లాగిన్ చేయండి →",
+        getStarted: "ప్రారంభించు",
+        learnMore: "మరింత తెలుసుకోండి →"
+    },
+    hi: {
+        heroTitle: "संपत्ति लेनदेन में क्रांति ला रहे हैं",
+        heroDescription: "हमारे ऑल-इन-वन प्लेटफ़ॉर्म के साथ आसानी से संपत्ति खरीदें, किराए पर लें या बेचें।",
+        featured: "विशेषताएं",
+        viewProperties: "संपत्तियाँ देखें",
+        marketplace: "बाज़ार",
+        company: "कंपनी",
+        login: "लॉग इन करें →",
+        getStarted: "शुरू करें",
+        learnMore: "और जानें →"
+    }
+};
+
+// Function to change language
+function changeLanguage(lang) {
+    const elements = document.querySelectorAll("[data-key]");
+    elements.forEach(element => {
+        const key = element.getAttribute("data-key");
+        if (translations[lang] && translations[lang][key]) {
+            element.innerHTML = translations[lang][key];
+        }
+    });
+}
+
+// Set default language to English on page load
+document.addEventListener("DOMContentLoaded", () => {
+    changeLanguage('en');
+});
+</script>
+
+</body>
+</html>

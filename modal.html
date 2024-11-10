@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charts in Modal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Show Detailed Analysis
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Charts and Analysis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-4">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- First Chart: Location Quality Factors -->
+                                <div class="chart-container">
+                                    <canvas id="locationQualityChart1"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <!-- Second Chart: Population Growth and Migration -->
+                                <div class="chart-container">
+                                    <canvas id="populationMigrationChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <!-- Third Chart: Historical Price Trends -->
+                                <div class="chart-container">
+                                    <canvas id="historicalPriceChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <!-- Fourth Chart: Risk Factors -->
+                                <div class="chart-container">
+                                    <canvas id="riskFactorsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<!-- JavaScript to Render the First Chart -->
+<script>
+    const labels1 = ["January", "February", "March", "April", "May", "June", "July"];
+    const locationFactorsData = {
+        "Neighborhood Development": [7, 8, 6, 7, 8, 9, 7],
+        "Crime Rates": [5, 4, 5, 6, 5, 4, 5],
+        "Urbanization and Infrastructure Growth": [6, 7, 8, 7, 8, 8, 9],
+        "Future Zoning Plans": [4, 5, 5, 6, 5, 6, 7],
+        "Environmental Quality (Natural Disasters)": [3, 4, 3, 4, 3, 3, 4]
+    };
+    const colors1 = {
+        "Neighborhood Development": "rgba(255, 99, 132, 1)",
+        "Crime Rates": "rgba(54, 162, 235, 1)",
+        "Urbanization and Infrastructure Growth": "rgba(75, 192, 192, 1)",
+        "Future Zoning Plans": "rgba(153, 102, 255, 1)",
+        "Environmental Quality (Natural Disasters)": "rgba(255, 159, 64, 1)"
+    };
+    const datasets1 = Object.keys(locationFactorsData).map(factor => ({
+        label: factor,
+        data: locationFactorsData[factor],
+        borderColor: colors1[factor],
+        fill: false,
+        tension: 0.2
+    }));
+    const ctx1 = document.getElementById("locationQualityChart1").getContext("2d");
+    new Chart(ctx1, {
+        type: "line",
+        data: {
+            labels: labels1,
+            datasets: datasets1
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Location Quality Factors Analysis"
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+</script>
+
+<!-- JavaScript to Render the Second Chart -->
+<script>
+    const labels2 = ["2016", "2017", "2018", "2019", "2020", "2021", "2022"];
+    const populationData = [2.5, 2.7, 2.8, 3.0, 3.2, 3.1, 3.3];
+    const migrationData = [1.2, 1.4, 1.6, 1.3, 1.5, 1.7, 1.8];
+    const ctx2 = document.getElementById("populationMigrationChart").getContext("2d");
+    new Chart(ctx2, {
+        type: "line",
+        data: {
+            labels: labels2,
+            datasets: [
+                {
+                    label: "Population Growth (%)",
+                    data: populationData,
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: "Migration Rate (%)",
+                    data: migrationData,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Population Growth and Migration Rate"
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Percentage (%)"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Year"
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<!-- JavaScript to Render the Third Chart -->
+<script>
+    const labels3 = ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"];
+    const priceData = [150000, 155000, 160000, 165000, 170000, 175000, 180000, 185000, 190000];
+    const ctx3 = document.getElementById("historicalPriceChart").getContext("2d");
+    new Chart(ctx3, {
+        type: "line",
+        data: {
+            labels: labels3,
+            datasets: [
+                {
+                    label: "Historical Property Prices ($)",
+                    data: priceData,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Historical Property Price Trends Over Time"
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: "Price in Dollars ($)"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Year"
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<!-- JavaScript to Render the Fourth Chart -->
+<script>
+    const labels4 = ["January", "February", "March", "April", "May", "June", "July"];
+    const economicRisk = [4, 5, 6, 4, 5, 3, 7];
+    const politicalRisk = [7, 6, 5, 4, 6, 5, 4];
+    const marketRisk = [3, 3, 2, 4, 5, 6, 7];
+    const environmentalRisk = [2, 2, 3, 2, 2, 3, 4];
+    const regulatoryRisk = [6, 7, 6, 5, 6, 6, 6];
+    const ctx4 = document.getElementById("riskFactorsChart").getContext("2d");
+    new Chart(ctx4, {
+        type: "line",
+        data: {
+            labels: labels4,
+            datasets: [
+                {
+                    label: "Economic Risk",
+                    data: economicRisk,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: "Political Risk",
+                    data: politicalRisk,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: "Market Risk",
+                    data: marketRisk,
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: "Environmental Risk",
+                    data: environmentalRisk,
+                    borderColor: "rgba(153, 102, 255, 1)",
+                    backgroundColor: "rgba(153, 102, 255, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: "Regulatory Risk",
+                    data: regulatoryRisk,
+                    borderColor: "rgba(255, 159, 64, 1)",
+                    backgroundColor: "rgba(255, 159, 64, 0.2)",
+                    fill: true,
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Risk Factors Over Time"
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10,
+                    title: {
+                        display: true,
+                        text: "Risk Level (1-10)"
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: "Month"
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

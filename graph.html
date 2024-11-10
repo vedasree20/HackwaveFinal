@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map with Marker Graphs</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    /* Map container size */
+    #map {
+      height: 600px;
+      width: 100vw;
+      margin: 50px 0 0 0;
+    }
+.body{
+    background-image: url('blue-pink-halftone-background_53876-99004.avif');
+    background-size: cover;
+}
+    /* Center popup content */
+    .popup-content {
+      text-align: center;
+    }
+
+    /* Graph container with fixed dimensions */
+    .graph-container {
+      width: 100%;
+      height: 300px;
+      display: none; /* Hide initially */
+    }
+
+    /* Canvas with fixed dimensions */
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  </style>
+</head>
+<body>
+    <div class="body">
+    <h1 style="font-family: Arial, Helvetica, sans-serif; text-align:center; padding-top:30px;">Detailed Analysis Of All the Properties listed in your areas</h1>
+    <a href="modal.html"><h4>Detailed Analysis</h4></a>
+
+  <div id="map"></div>
+</div>
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([17.4066, 78.4777], 13);
+
+    // Add a tile layer to the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Property data with coordinates and graph data
+     const properties = [
+          { id: 1, lat: 17.4066, lng: 78.4777, graphData: [65, 59, 80, 81, 56, 55, 40] },
+          { id: 2, lat: 17.4239, lng: 78.4738, graphData: [65, 90, 80, 81, 56, 55, 40] },
+          { id: 3, lat: 17.4399, lng: 78.4983,graphData: [65, 59, 99, 81, 56, 55, 40] },
+          { id: 4, lat: 17.3847, lng: 78.4867,graphData: [65, 59, 80, 81, 46, 55, 40] },
+          { id: 5, lat: 17.4483, lng: 78.3915,graphData: [65, 59, 80, 81, 56, 75, 40] },
+          { id: 6, lat: 17.4424, lng: 78.4633 ,graphData: [65, 59, 80, 81, 56, 55, 90]},
+          { id: 7, lat: 17.3734, lng: 78.5442 ,graphData: [21, 59, 80, 21, 56, 55, 40]},
+          { id: 8, lat: 17.4156, lng: 78.4747 ,graphData: [65, 39, 80, 81, 26, 15, 4]},
+          { id: 9, lat: 17.4214, lng: 78.4576 ,graphData: [65, 59, 30, 81, 56, 55, 40]},
+          { id: 10, lat: 17.3966, lng: 78.4633 ,graphData: [65, 59, 80, 41, 56, 55, 40]},
+          { id: 11, lat: 17.4449, lng: 78.4927 ,graphData: [65, 59, 80, 81, 16, 55, 40]},
+          { id: 12, lat: 17.3685, lng: 78.5273 ,graphData: [65, 59, 80, 81, 26, 35, 40]},
+          { id: 13, lat: 17.3512, lng: 78.4989 ,graphData: [65, 59, 80, 81, 56, 55, 90]},
+          { id: 14, lat: 17.4028, lng: 78.5417 ,graphData: [65, 49, 80, 81, 56, 55, 40]},
+          { id: 15, lat: 17.4304, lng: 78.4656 ,graphData: [25, 59, 80, 81, 56, 55, 40]},
+          { id: 16, lat: 17.3871, lng: 78.4403 ,graphData: [65, 59, 60, 81, 56, 55, 40]},
+          { id: 17, lat: 17.4464, lng: 78.4872 ,graphData: [65, 59, 80, 101, 56, 55, 40]},
+          { id: 18, lat: 17.3506, lng: 78.4747 ,graphData: [65, 59, 80, 81, 26, 55, 40]},
+          { id: 19, lat: 17.3776, lng: 78.5139 ,graphData: [65, 59, 80, 81, 56, 25, 40]},
+          { id: 20, lat: 17.4295, lng: 78.4462 ,graphData: [65, 59, 80, 81, 56, 55, 20]},
+          { id: 21, lat: 17.3925, lng: 78.4598 ,graphData: [65, 59, 80, 81, 56, 55, 10]},
+          { id: 22, lat: 17.4145, lng: 78.5265 ,graphData: [65, 59, 80, 81, 56, 15, 40]},
+          { id: 23, lat: 17.3727, lng: 78.4596 ,graphData: [65, 59, 80, 81, 66, 55, 40]},
+          { id: 24, lat: 17.4355, lng: 78.5079 ,graphData: [65, 59, 80, 11, 56, 55, 40]},
+          { id: 25, lat: 17.3585, lng: 78.4745 ,graphData: [65, 59, 10, 81, 56, 55, 40]},
+          { id: 26, lat: 17.3841, lng: 78.4441 ,graphData: [65, 19, 80, 81, 56, 55, 40]},
+          { id: 27, lat: 17.4084, lng: 78.5053 ,graphData: [15, 59, 80, 81, 56, 55, 40]},
+          { id: 28, lat: 17.4326, lng: 78.5273 ,graphData: [65, 29, 80, 81, 56, 55, 40]},
+          { id: 29, lat: 17.4246, lng: 78.4953 ,graphData: [65, 59, 20, 81, 56, 55, 40]},
+          { id: 30, lat: 17.3996, lng: 78.5245 ,graphData: [65, 59, 80, 21, 56, 55, 40]},
+          { id: 31, lat: 17.3676, lng: 78.4535 ,graphData: [65, 59, 80, 81, 26, 55, 40]},
+          { id: 32, lat: 17.4392, lng: 78.4555 ,graphData: [65, 59, 80, 81, 56, 25, 40]},
+          { id: 33, lat: 17.4115, lng: 78.5035 ,graphData: [65, 59, 80, 81, 56, 55, 30]},
+          { id: 34, lat: 17.3985, lng: 78.4675 ,graphData: [65, 59, 80, 81, 56, 55, 90]},
+          { id: 35, lat: 17.4564, lng: 78.4956 ,graphData: [65, 59, 80, 81, 56, 95, 40]},
+          { id: 36, lat: 17.4457, lng: 78.4732 ,graphData: [65, 59, 80, 81, 96, 55, 40]},
+          { id: 37, lat: 17.3849, lng: 78.4502 ,graphData: [65, 59, 80, 91, 56, 55, 40]},
+          { id: 38, lat: 17.4174, lng: 78.4912 ,graphData: [65, 59, 90, 81, 56, 55, 40]},
+          { id: 39, lat: 17.4069, lng: 78.5234 ,graphData: [65, 99, 80, 81, 56, 55, 40]},
+          { id: 40, lat: 17.4245, lng: 78.5165 ,graphData: [95, 59, 80, 81, 56, 55, 40]},
+          { id: 41, lat: 17.3993, lng: 78.4796 ,graphData: [65, 99, 80, 81, 56, 55, 40]},
+          { id: 42, lat: 17.4303, lng: 78.4786 ,graphData: [65, 59, 90, 81, 56, 55, 40]},
+          { id: 43, lat: 17.3714, lng: 78.5214 ,graphData: [9, 59, 80, 91, 25, 55, 40]},
+          { id: 44, lat: 17.3992, lng: 78.4875 ,graphData: [65, 59, 80, 81, 86, 55, 40]},
+          { id: 45, lat: 17.4557, lng: 78.4884 ,graphData: [65, 59, 80, 81, 56, 85, 40]},
+          { id: 46, lat: 17.4215, lng: 78.4667 ,graphData: [65, 59, 80, 81, 56, 55, 20]},
+          { id: 47, lat: 17.3848, lng: 78.4827 ,graphData: [65, 59, 80, 81, 56, 25, 20]},
+          { id: 48, lat: 17.4039, lng: 78.4492 ,graphData: [65, 59, 80, 81, 56, 55, 10]},
+          { id: 49, lat: 17.3725, lng: 78.4975 ,graphData: [65, 59, 80, 81, 16, 55, 40]},
+          { id: 50, lat: 17.4399, lng: 78.5057 ,graphData: [65, 59, 80, 81, 56, 15, 40]}
+        ];
+
+    // Create markers and bind popups with a button to show the graph
+    properties.forEach(function(property) {
+      var marker = L.marker([property.lat, property.lng]).addTo(map);
+
+      // Bind popup content with a button to show the graph
+      marker.bindPopup(`
+        <div class="popup-content">
+          <h3>Property ${property.id}</h3>
+          <button onclick="showGraph(${property.id})">Show Graph</button>
+          <div id="graph-container-${property.id}" class="graph-container">
+            <canvas id="graph-${property.id}"></canvas>
+          </div>
+        </div>
+      `);
+    });
+
+    // Function to show graph when button is clicked
+    function showGraph(id) {
+      var property = properties.find(function(p) { return p.id === id; });
+      var graphContainer = document.getElementById(`graph-container-${id}`);
+      var canvas = document.getElementById(`graph-${id}`);
+      
+    //   const para = document.createElement("button");
+    //   para.innerHTML = "This is a paragraph";
+    //   document.body.appendChild(para);
+      // Make the graph container visible
+      graphContainer.style.display = 'block';
+
+      // Check if chart instance already exists, if not create a new chart
+      if (!canvas.chart) {
+        var ctx = canvas.getContext('2d');
+        canvas.chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [2003, 2005, 2010, 2013 , 2015, 2024, 2026],
+            datasets: [{
+              label: `Data for Property ${id}`,
+              data: property.graphData,
+              fill: false,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
